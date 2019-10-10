@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack",
+    "dev": "webpack --mode=development"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/cyberspacedk/Deploying-a-project-from-scratch/issues"
   },
-  "homepage": "https://github.com/cyberspacedk/Deploying-a-project-from-scratch#readme"
+  "homepage": "https://github.com/cyberspacedk/Deploying-a-project-from-scratch#readme",
+  "devDependencies": {
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9"
+  }
 }

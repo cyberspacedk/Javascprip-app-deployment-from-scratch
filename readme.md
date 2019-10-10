@@ -10,10 +10,12 @@ npm init -y
 ```
 
 
-# Webpack
+2. Ставим Webpack. 
+
 ```js
 npm i --save-dev webpack webpack-cli
 ```
+Детальный туториал я описал тут [Webpack](https://github.com/cyberspacedk/JS_POCKET/tree/master/Webpack)
 
 После установки `webpack` нужно прописать `npm-script` 
 
@@ -21,6 +23,13 @@ npm i --save-dev webpack webpack-cli
 // package.json
 
 "scripts":{
-    "start": "webpack --mode=development"
+    "dev": "webpack --mode=development"
 }
 ``` 
+
+3. Создаем в корне `.gitignore` 
+
+```js 
+node_modules
+dist
+```
