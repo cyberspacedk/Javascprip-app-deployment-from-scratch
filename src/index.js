@@ -1,3 +1,3 @@
 import text from './temp';
 
-console.log(text);
+console.log(text('file'));

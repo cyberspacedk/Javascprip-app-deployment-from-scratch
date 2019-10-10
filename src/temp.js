@@ -1,3 +1,3 @@
-const text = 'I imported file';
+const text = name => `I imported ${name}`;
 
 export default text;

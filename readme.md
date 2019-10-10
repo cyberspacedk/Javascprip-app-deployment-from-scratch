@@ -23,13 +23,29 @@ npm i --save-dev webpack webpack-cli
 // package.json
 
 "scripts":{
+    "build": "webpack --mode=production",
     "dev": "webpack --mode=development"
 }
 ``` 
 
+Скрипт с флагом `-- --mode` запустит сборку в том режиме , который укажем после `mode`. 
+Например `npm run build -- --mode development` 
+
 3. Создаем в корне `.gitignore` 
 
 ```js 
+// .gitignore
+
 node_modules
 dist
+```
+
+4. Ставим `Babel`.
+
+```js
+npm i -D @babel/core @babel/cli @babel/preset-env
+```
+Также установим сразу и loader для webpack
+```js
+npm i -D babel-loader
 ```
