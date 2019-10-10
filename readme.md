@@ -57,9 +57,11 @@ npm i -D babel-loader
 npm i -S react react-dom prop-types 
 ```
 Для того чтобы `Babel` смог обработать jsx код нужно добавить пресет для react.
+
 ```js
 npm i -D @babel/preset-react
 ```
+
 Не забываем обновить  `Babel загрузчик`
 
 ```js
@@ -73,4 +75,9 @@ rules: [
 				}
 			}
 		]
+```
+
+6. Для работы с `html` файлами необходимо уставновить плагин `html-webpack-plugin`
+```js
+npm i -D html-webpack-plugin
 ```
