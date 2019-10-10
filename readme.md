@@ -45,7 +45,32 @@ dist
 ```js
 npm i -D @babel/core @babel/cli @babel/preset-env
 ```
-Также установим сразу и loader для webpack
+Также установим сразу и `babel-loader` для `webpack` и пропишем лоадер для `.js` в `webpack.config.js`. правила.
+
 ```js
 npm i -D babel-loader
+```
+
+5. Ставим `react` , `react-dom`, `prop-types`.
+
+```js
+npm i -S react react-dom prop-types 
+```
+Для того чтобы `Babel` смог обработать jsx код нужно добавить пресет для react.
+```js
+npm i -D @babel/preset-react
+```
+Не забываем обновить  `Babel загрузчик`
+
+```js
+rules: [
+			{
+				test: /\.js$/, 
+				loader: 'babel-loader',
+				exclude: /node_modules/,
+				options: {
+					presets: ['@babel/preset-env', '@babel/preset-react']
+				}
+			}
+		]
 ```
