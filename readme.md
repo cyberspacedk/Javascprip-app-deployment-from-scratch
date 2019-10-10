@@ -78,6 +78,68 @@ rules: [
 ```
 
 6. Для работы с `html` файлами необходимо уставновить плагин `html-webpack-plugin`
+
 ```js
 npm i -D html-webpack-plugin
+```
+Также нужно создать в `src` html-темплейт `index.html` с одним тегом которому дать `id` который мы указали для рендера разметки реакт. 
+
+В настройках плагина указать этот темплейт.
+
+```js
+plugins: [new HtmlWebpackPlugin({
+	template: './index.html'
+})]
+```
+Теперь реакт будет вставлять сгенерированный `DOM` в этот тег, и `webpack` в конец `body` подключит собранный бандл.
+
+7. Webpack_merge
+
+Для разделения режима сборки на **development** / **production** и присоединения только необходимых нстроек к базовому конфигу. 
+```js
+npm i -D webpack-merge
+```
+Разбиваем основной `webpack.config.js` на логические блоки. 
+- `webpack.config.base.js` 
+- `webpack.config.dev.js` 
+- `webpack.config.prod.js` 
+
+8. DEVSERVER
+
+Для отслеживания изменений в реальном времени
+```js
+npm i -D webpack-dev-server
+```
+9. DEVTOOL
+
+[read ...](https://webpack.js.org/configuration/devtool/#devtool)
+
+Для читаемости кода который сбандлили нужно прописать поле `devtool: 'source-map'`. 
+Для режима **dev** и **prod** можно указывать разные опции 
+
+10. Support proposal features
+
+В стандартный пресет `babel` не входят фичи из стадии `proposal`, например как синтаксис полей класса `state = { field: value }`
+
+Чтобы `babel` смог обрабатыватть такой код нужно расширить пресеты
+
+Ставим 
+```js
+npm i -D @babel/plugin-proposal-class-properties
+```
+И добавляем в настроки `babel-loader` новый плагин
+```js
+module: {
+	rules: [
+		{
+			test: /\.js|\.jsx$/, 
+			loader: 'babel-loader',
+			exclude: /node_modules/,
+			options: {
+				presets: ['@babel/preset-env', '@babel/preset-react'],
+				plugins: ['@babel/plugin-proposal-class-properties']
+			}
+		}
+	]
+	},
 ```
