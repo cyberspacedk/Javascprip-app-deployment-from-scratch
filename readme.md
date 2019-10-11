@@ -62,12 +62,12 @@ npm i -S react react-dom prop-types
 npm i -D @babel/preset-react
 ```
 
-Не забываем обновить  `Babel загрузчик`
+Не забываем обновить  `Babel загрузчик`. Если будут файлы с расширением `.jsx` то нужно добавить их в тест регулярки. 
 
 ```js
 rules: [
 			{
-				test: /\.js$/, 
+				test: /\.js|\.jsx$/, 
 				loader: 'babel-loader',
 				exclude: /node_modules/,
 				options: {
