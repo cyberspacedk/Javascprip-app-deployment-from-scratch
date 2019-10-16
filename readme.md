@@ -143,3 +143,20 @@ module: {
 	]
 	},
 ```
+
+11. Support CSS/SCSS
+
+Для поддержки файлов стилей нужно достваить нужный лоадер
+
+```js
+npm i -D css-loader style-loader
+```
+
+После в базовом конфиге обновить массив правил - `rules`
+```js
+{
+	test: /\.css$/,
+	use: ['style-loader', 'css-loader'],
+	exclude: /node-modules/
+}
+```
