@@ -160,3 +160,62 @@ npm i -D css-loader style-loader
 	exclude: /node-modules/
 }
 ```
+
+12. Hot loader
+
+[github](https://github.com/gaearon/react-hot-loader)  
+[читаем-раз](https://gaearon.github.io/react-hot-loader/getstarted/)
+[читаем-два](https://habr.com/ru/post/433122/)  
+
+Горячая перезагрузка позволяет перерендеривать компонент без перезагрузки страницы, тем самым избегая потери состояния компоненты.
+
+Ставим пакет как `dependencies`. 
+
+```js
+npm i -S react-hot-loader
+```
+**После нужно**
+
+- на уровне Арр импортировать `import {hot} from 'react-hot-loader/root'` ПЕРЕД импортом React  
+- при экспорте компоненты обернуть в хок `export default hot(App)`  
+- обновить плагины babel в base  конфиге 
+```js
+{
+				test: /\.js|\.jsx$/, 
+				loader: 'babel-loader',
+				exclude: /node_modules/,
+				options: {
+					presets: ['@babel/preset-env', '@babel/preset-react'],
+					plugins: ['react-hot-loader/babel','@babel/plugin-proposal-class-properties']
+				}
+			},
+```  
+- создать новый скрипт в package.json с добавлением флага `--hot`
+```js
+"dev:hot": "npm run dev -- --hot"
+```  
+
+13. Bundle analyzer
+
+[инфа и опции](https://github.com/webpack-contrib/webpack-bundle-analyzer#options-for-plugin)
+```js
+npm i -D webpack-bundle-analyzer
+```
+После установки обновляем `production` конфиг  
+```js
+const merge = require('webpack-merge');
+const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
+const baseConfig = require('./webpack.config.base');
+
+module.exports = merge(baseConfig, {
+    mode: 'production',
+    plugins: [ new BundleAnalyzerPlugin({
+			analyzerMode: 'static'
+		})]
+})
+```
+Запустив режим продакшена, в браузере откроется окно в котором будет отображена полная информация о составе бандла.
+
+Передав в качестве опции `analyzerMode: 'static'` получим в папку `dist` файл `report.html` c информацие о бандле.
+
+ 
