@@ -218,4 +218,34 @@ module.exports = merge(baseConfig, {
 
 Передав в качестве опции `analyzerMode: 'static'` получим в папку `dist` файл `report.html` c информацие о бандле.
 
- 
+14. Browser support. Babel polyfill
+
+Поддержка новых свойств в браузерах.
+
+```js
+npm i -S @babel/polyfill
+```
+После установки, чтобы не загружать всю либу, нужно определить браузеры которые нужно поддерживать 
+Посмотреть список `npx browserslist`
+Нужно прописать список браузеров в настроках `babel-loader` в `base` конфиге 
+
+```js
+{
+  test: /\.js|\.jsx$/, 
+  loader: 'babel-loader',
+  exclude: /node_modules/,
+  options: {
+    presets: [['@babel/preset-env', {
+      targets:  [
+        'last 2 versions',
+        'not dead',
+        'not < 2%',
+        'not ie 11'
+        ],
+      useBuiltIns: 'entry'
+    }], '@babel/preset-react'],
+
+  plugins: ['react-hot-loader/babel','@babel/plugin-proposal-class-properties']
+  }
+},
+```
