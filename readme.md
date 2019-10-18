@@ -249,3 +249,57 @@ npm i -S @babel/polyfill
   }
 },
 ```
+
+15. React/ReactDom CDN
+
+С целью оптимизации бандла можем вынести `react` и `react-dom` в режиме продакшена, включив их  минифицированные сборки с помощью CDN.
+
+[ссылки на CDN](https://ru.reactjs.org/docs/cdn-links.html)
+
+В `production` конфиге нужно добавить поле `externals` в которой указать внешние источники
+
+```js
+const merge = require('webpack-merge');
+const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
+const baseConfig = require('./webpack.config.base');
+
+module.exports = merge(baseConfig, {
+    mode: 'production',
+    plugins: [ new BundleAnalyzerPlugin({
+        analyzerMode: 'static'
+    })],
+    externals: {
+        react: 'React',
+        'react-dom': 'ReactDOM'
+    }
+})
+```
+
+В файле `src/index.html` нужно прилинковать ссылки на CDN
+
+```html
+ <div id="root"></div>
+    <% if(process.env.NODE_ENV === 'production') {%>
+        <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+        <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <%} %>
+```
+
+Webpack присборке проекта прилинкует `react` и `reactDom`.
+
+16. Dynamic import support 
+
+Для поддержки синтаксиса динамического импорта `React.lazy(()=> import('./component'))` нужно добавить `Babel` плагин. 
+
+```js
+npm i -D @babel/plugin-syntax-dynamic-import
+```
+После этого нужно обновить массив плагинов `babel` в `base` конфиге
+
+```js
+plugins: [
+						'react-hot-loader/babel',
+						'@babel/plugin-proposal-class-properties',
+						'@babel/plugin-syntax-dynamic-import'
+					]
+```
