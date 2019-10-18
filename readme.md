@@ -303,3 +303,21 @@ plugins: [
 						'@babel/plugin-syntax-dynamic-import'
 					]
 ```
+
+17. Jest
+
+Уставновив jest нужно прописать скрипт в `package.json`
+```js
+npm i -D jest
+```
+
+```json
+ "scripts": {
+    "build": "webpack --config webpack.config.prod.js",
+    "dev": "webpack-dev-server --open --config webpack.config.dev.js",
+    "dev:hot": "npm run dev -- --hot",
+    "test": "jest"
+  },
+```
+
+18. 
