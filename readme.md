@@ -292,7 +292,7 @@ Webpack присборке проекта прилинкует `react` и `react
 Для поддержки синтаксиса динамического импорта `React.lazy(()=> import('./component'))` нужно добавить `Babel` плагин. 
 
 ```js
-npm i -D @babel/plugin-syntax-dynamic-import
+npm i -D @babel/plugin-syntax-dynamic-import @babel/plugin-syntax-dynamic-import-node
 ```
 После этого нужно обновить массив плагинов `babel` в `base` конфиге
 
@@ -304,11 +304,11 @@ plugins: [
 					]
 ```
 
-17. Jest
+17. Jest , testing-library/jest-dom , testing-library/react
 
 Уставновив jest нужно прописать скрипт в `package.json`
 ```js
-npm i -D jest
+npm i -D jest @testing-library/jest-dom  @testing-library/react
 ```
 
 ```json
@@ -320,4 +320,70 @@ npm i -D jest
   },
 ```
 
-18. 
+Конфигурируем `jest`
+
+[конфигурация jest...](https://jestjs.io/docs/ru/configuration)
+
+- в корне создаем `jest.config.js` и `setup-tests.js`
+
+Чтобы в тестовых файлах каждый раз не импортировать например 
+
+```js
+import '@testing-library/jest-dom';
+import '@testing-library/react';
+```
+
+импорт этих модулей можно произвести единожды в файле `setup-tests.js` и затем прописать путь к нему в `jest.congif.js`
+
+```js
+const path = require('path');
+
+
+module.exports = {
+    setupFilesAfterEnv: [require.resolve('./setup-tests.js')]
+}
+```
+
+18. .babelrc и babel-jest
+
+Для конфигурирования `babel` удобно вынести настройки в отдельный файл `.babelrc`. 
+`Babel-loader` будет искать файл настроек `.babelrc` поэтому его можно вынести отдельно
+
+Перенесем туда из `base` кофига опции `babel`
+
+```js
+// babelrc
+{
+    "presets": [["@babel/preset-env", {
+        "targets":  [
+            "last 2 versions",
+            "not dead",
+            "not < 2%",
+            "not ie 11"
+            ],
+        "useBuiltIns": "entry"
+    }], "@babel/preset-react"],
+
+    "plugins": [
+        "react-hot-loader/babel",
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-syntax-dynamic-import"
+    ]
+}
+```
+В `base` конфиге оставим 
+
+```js
+// webpack.base.congig.js
+rules: [
+			{
+				test: /\.js|\.jsx$/, 
+				loader: 'babel-loader',
+				exclude: /node_modules/, 
+			},
+```
+
+Также для работы с тестами поставим 
+```js
+npm i -D babel-jest babel-core@bridge
+```
