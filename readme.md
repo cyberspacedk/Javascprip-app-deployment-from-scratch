@@ -218,47 +218,77 @@ module.exports = merge(baseConfig, {
 
 Передав в качестве опции `analyzerMode: 'static'` получим в папку `dist` файл `report.html` c информацие о бандле.
 
-14. Browserslist. Babel polyfill
 
-Поддержка новых свойств в браузерах. Babel будет применять поддержку к указанным в `targets` браузерам. 
 
-Детально с конфигурацией настройки целевых браузеров 
-[browserlist github...](https://github.com/browserslist/browserslist)
 
-Сконфигурировать целевые браузеры можно тремя способами
-1. `.babelrc`
-2. `package.json`
-3. `.browserlistrc`
+
+14. Babel-polyfill OR Core-JS
+
+`Babel polyfill` поддержка новых фичей js в браузерах.  
 
 ```js
 npm i -S @babel/polyfill
 ```
+
+[read about babel polyfills...](https://babeljs.io/docs/en/babel-polyfill)
+
 После установки, чтобы не загружать всю либу, нужно определить браузеры которые нужно поддерживать 
 Посмотреть список `npx browserslist`
-Нужно прописать список браузеров в настроках `babel-loader` в `base` конфиге 
+Нужно прописать список браузеров в настроках `babel-loader` в `base` конфиге либо в файле конфигурации `.babelrc`
+
+
+Babel будет применять поддержку к указанным в `targets` браузерам. 
+ 
+Детально с конфигурацией настройки целевых браузеров 
+[browserlist github...](https://github.com/browserslist/browserslist)
 
 ```js
-{
-  test: /\.js|\.jsx$/, 
-  loader: 'babel-loader',
-  exclude: /node_modules/,
-  options: {
-    presets: [['@babel/preset-env', {
-      targets:  [
-        'last 2 versions',
-        'not dead',
-        'not < 2%',
-        'not ie 11'
-        ],
-      useBuiltIns: 'entry'
-    }], '@babel/preset-react'],
-
-  plugins: ['react-hot-loader/babel','@babel/plugin-proposal-class-properties']
+presets: [['@babel/preset-env', {
+  targets:  [
+    'last 2 versions',
+    'not dead',
+    'not < 2%',
+    'not ie 11'
+    ],
+  useBuiltIns: 'usage' // значение 'usage' - подгрузит только те, которые необходимы . 'entry' - загрузит все 
+}], '@babel/preset-react'],
+plugins: ['react-hot-loader/babel','@babel/plugin-proposal-class-properties']
   }
 },
 ```
+`Core-JS` ядро JS. Наиболее актуальный способ. 
 
-Также список поддерживаемых браузеров можно указать в `package.json`
+[read ...](https://babeljs.io/blog/2019/03/19/7.4.0#core-js-3-7646)
+
+```js
+npm i core-js
+```
+После установки нужно прописать в конфиге `.babelrc`
+
+```js
+// .babelrc
+"presets": [
+		["@babel/preset-env", {
+		"targets":  [
+			"last 2 versions",
+			"not dead",
+			"not < 2%",
+			"not ie 11"
+      ],
+    "corejs": 3, 
+		"useBuiltIns": "usage"
+	}], 
+```
+
+
+15. Browserslist. 
+
+Сконфигурировать целевые браузеры можно тремя способами  
+1. `.babelrc`  
+2. `package.json`  
+3. `.browserlistrc`  
+
+- Также список поддерживаемых браузеров можно указать в `package.json`
 
 ```js
 // package.json
@@ -271,7 +301,7 @@ npm i -S @babel/polyfill
 ]
 ```
 
-Или путем создания конфигруациооного файла `.browserslistrc` где без кавычек и с новой строки указываем список поддерживаемых браузеров
+- Или путем создания конфигруациооного файла `.browserslistrc` где без кавычек и с новой строки указываем список поддерживаемых браузеров
 
 ```js
 // .browserslistrc
@@ -282,7 +312,7 @@ npm i -S @babel/polyfill
   not ie 11 
 ```
 
-15. React/ReactDom CDN
+16. React/ReactDom CDN
 
 С целью оптимизации бандла можем вынести `react` и `react-dom` в режиме продакшена, включив их  минифицированные сборки с помощью CDN.
 
@@ -319,7 +349,7 @@ module.exports = merge(baseConfig, {
 
 Webpack присборке проекта прилинкует `react` и `reactDom`.
 
-16. Dynamic import support 
+17. Dynamic import support 
 
 Для поддержки синтаксиса динамического импорта `React.lazy(()=> import('./component'))` нужно добавить `Babel` плагин. 
 
@@ -336,7 +366,7 @@ plugins: [
 					]
 ```
 
-17. Jest , testing-library/jest-dom , testing-library/react
+18. Jest , testing-library/jest-dom , testing-library/react
 
 Уставновив jest нужно прописать скрипт в `package.json`
 ```js
@@ -376,7 +406,7 @@ module.exports = {
 }
 ```
 
-18. .babelrc и babel-jest
+19. .babelrc и babel-jest
 
 Для конфигурирования `babel` удобно вынести настройки в отдельный файл `.babelrc`. 
 `Babel-loader` будет искать файл настроек `.babelrc` поэтому его можно вынести отдельно
@@ -419,3 +449,10 @@ rules: [
 ```js
 npm i -D babel-jest babel-core@bridge
 ```
+
+
+
+
+Chunks
+
+[hackernoon...](https://medium.com/hackernoon/the-100-correct-way-to-split-your-chunks-with-webpack-f8a9df5b7758)
