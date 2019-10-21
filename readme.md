@@ -217,11 +217,7 @@ module.exports = merge(baseConfig, {
 Запустив режим продакшена, в браузере откроется окно в котором будет отображена полная информация о составе бандла.
 
 Передав в качестве опции `analyzerMode: 'static'` получим в папку `dist` файл `report.html` c информацие о бандле.
-
-
-
-
-
+ 
 14. Babel-polyfill OR Core-JS
 
 `Babel polyfill` поддержка новых фичей js в браузерах.  
@@ -433,10 +429,10 @@ module.exports = {
     ]
 }
 ```
-В `base` конфиге оставим 
+В `base` конфиге оставим только 
 
 ```js
-// webpack.base.congig.js
+// webpack.base.config.js
 rules: [
 			{
 				test: /\.js|\.jsx$/, 
