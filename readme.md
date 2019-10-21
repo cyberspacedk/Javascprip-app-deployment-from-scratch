@@ -218,9 +218,17 @@ module.exports = merge(baseConfig, {
 
 Передав в качестве опции `analyzerMode: 'static'` получим в папку `dist` файл `report.html` c информацие о бандле.
 
-14. Browser support. Babel polyfill
+14. Browserslist. Babel polyfill
 
-Поддержка новых свойств в браузерах.
+Поддержка новых свойств в браузерах. Babel будет применять поддержку к указанным в `targets` браузерам. 
+
+Детально с конфигурацией настройки целевых браузеров 
+[browserlist github...](https://github.com/browserslist/browserslist)
+
+Сконфигурировать целевые браузеры можно тремя способами
+1. `.babelrc`
+2. `package.json`
+3. `.browserlistrc`
 
 ```js
 npm i -S @babel/polyfill
@@ -248,6 +256,30 @@ npm i -S @babel/polyfill
   plugins: ['react-hot-loader/babel','@babel/plugin-proposal-class-properties']
   }
 },
+```
+
+Также список поддерживаемых браузеров можно указать в `package.json`
+
+```js
+// package.json
+
+"browserslist": [
+  'last 2 versions',
+    'not dead',
+    'not < 2%',
+    'not ie 11'
+]
+```
+
+Или путем создания конфигруациооного файла `.browserslistrc` где без кавычек и с новой строки указываем список поддерживаемых браузеров
+
+```js
+// .browserslistrc
+
+  last 2 versions
+  not dead
+  not < 2%
+  not ie 11 
 ```
 
 15. React/ReactDom CDN
