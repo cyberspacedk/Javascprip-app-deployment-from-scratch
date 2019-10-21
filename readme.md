@@ -443,11 +443,252 @@ rules: [
 
 Также для работы с тестами поставим 
 ```js
-npm i -D babel-jest babel-core@bridge
+npm i -D babel-jest babel-core@bridge 
 ```
 
+Также для поддержки динамического импорта в `node`
 
+```js
+npm i babel-plugin-dynamic-import-node
+```
+После обновим кофиг `.babelrc` добавив новое поле `env` со значением `test`
 
+```js
+	"env": {
+		"test": {
+			"plugins": ["dynamic-import-node"]
+		}
+	} 
+```
+
+20. Linters, code prettier, Husky
+
+### Ставим пакеты
+
+```js
+npm i -D prettier eslint-config-airbnb eslint-config-prettier eslint-plugin-prettier eslint-plugin-react eslint-plugin-import eslint-plugin-jsx-a11y husky lint-staged babel-eslint
+```
+Читаемый список
+```js 
+prettier
+babel-eslint
+eslint-config-airbnb
+eslint-config-prettier
+eslint-plugin-prettier
+eslint-plugin-react
+eslint-plugin-import
+eslint-plugin-jsx-a11y
+husky
+lint-staged
+```
+
+### Ставим плагины для IDE
+
+- prettier
+- eslint
+- editorconfig
+
+Husky работает в связке с lint-staged. **До установки в проект, папка с проектом уже должна отслеживаться git**
+
+### Создаем файлы-конфигурцядом с package.json
+
+- EDITORCONFIG **.editorconfig**
+
+[docs editorconfig](https://editorconfig.org/#example-file)
+
+Чтобы все пользовались едиными настройками, касающимися, например, отступов или символов перевода строки, применяем файл .editorconfig. 
+Он помогает поддерживать единый набор правил в неоднородных командах.
+
+```js
+root = true
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.js]
+trim_trailing_whitespace = true
+
+# Переводы строк в стиле Unix с пустой строкой в конце файла
+[*]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+insert_final_newline = true
+max_line_length = 80
+```
+
+- PRETTIER **.prettierrc**
+
+[docs prettier](https://prettier.io/docs/en/options.html)
+
+```js
+{
+  "printWidth": 80,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "bracketSpacing": true,
+  "jsxBracketSameLine": false,
+  "arrowParens": "avoid",
+  "proseWrap": "always"
+}
+```
+
+- ESLINT **.eslintrc**
+
+[docs eslint](https://eslint.org/docs/user-guide/configuring)
+
+Нужно заинитить `eslint`
+```js
+npx eslint --init
+```
+
+структура конфига `eslint`
+```js
+{ 
+   env:{}, 
+   extends: {}, 
+   plugin: {}, 
+   parser: {}, 
+   parserOptions: {}, 
+   rules: {},
+}
+```
+- `env` — позволяет задавать **список сред**, код для которых планируется проверять. В нашем случае тут имеются свойства es6, browser и node, установленные в true. Параметр **es6** включает возможности ES6 за исключением модулей (эта возможность автоматически устанавливает, в блоке parserOptions, параметр ecmaVersion в значение 6). Параметр **browser** подключает глобальные переменные браузера, такие, как Windows. Параметр **node** добавляет глобальные переменные среды Node.js и области видимости, например — global. 
+[подробно о env...](https://eslint.org/docs/user-guide/configuring#specifying-environments)
+
+- `extends` — представляет собой массив строк с конфигурациями, при этом каждая дополнительная конфигурация расширяет предыдущую.  
+
+- `plugins` — тут представлены правила линтинга, которые мы хотим использовать. У нас применяются правила `["react", "import", "prettier", "jsx-a11y"]`
+
+- `parser` — по умолчанию ESLint использует синтаксический анализатор Espree, но, так как мы работаем с Babel, нам надо пользоваться babel-esLint.
+
+- `parserOptions` — так как мы изменили стандартный синтаксический анализатор на babel-eslint, нам необходимо задать и свойства в этом блоке. Свойство **ecmaVersion**, установленное в значение 6, указывает **ESLint** на то, что проверяться будет ES6-код. Так как код мы пишем в EcmaScript-модулях, свойство **sourceType** установлено в значение module. И, наконец, так как мы используем React, что означает применение JSX, то в свойство **ecmaFeatures** записывается объект с ключом jsx, установленным в true.
+
+- `rules` — эта часть файла позволяет настраивать правила ESLint. Все правила, которые мы расширили или добавили с помощью плагинов, можно менять или переопределять, и делается это именно в блоке rules. 
+
+Примерный конфиг
+
+```js
+{
+  "extends": [
+    "airbnb",
+    "prettier",
+    "prettier/react"
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:prettier/recommended",
+    "plugin:import/errors",
+  ],
+  "plugins": ["react", "import", "prettier", "jsx-a11y"],
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true,
+    "jest": true
+  },
+  "rules": {
+    "no-console": 1,
+    "linebreak-style": ["error", "unix"],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/destructuring-assignment": [
+      2,
+      "always",
+      { "ignoreClassFields": true }
+    ]
+  },
+  "globals": {
+    "window": true,
+    "document": true,
+    "localStorage": true,
+    "FormData": true,
+    "FileReader": true,
+    "Blob": true,
+    "navigator": true
+  }, 
+  "settings": {
+    "react": {
+      "version": "16.10.2"
+    }
+  }
+}
+```
+Файл `.eslintignore`.
+Этот файл принимает список путей, представляющий папки, содержимое которых не должно обрабатываться с помощью ESLint.
+
+- `/.git` — мне не нужно, чтобы ESLint проверял файлы, относящиеся к Git.  
+- `/.vscode` — в проекте имеется эта папка из-за того, что я использую VS Code. Тут редактор хранит конфигурационные сведения, которые можно задавать для каждого проекта. Эти данные тоже не должны обрабатываться линтером.
+- `node-modules` — файлы зависимостей также не нужно проверять линтером.
+
+- LINT-STAGED **.lintstagedrc**
+
+[docs lint-staged](https://github.com/okonet/lint-staged)
+
+Пакет `Lint-staged` позволяет проверять с помощью линтера индексированные файлы, что помогает предотвратить отправку в репозиторий кода с ошибками.
+
+```js
+{
+  "linters": {
+    "src/**/*.{json,css}": ["prettier --write", "git add"],
+    "src/**/*.js": ["prettier --write", "eslint --fix", "git add"]
+  }
+}
+```
+
+- HUSKY **.huskyrc**
+
+Пакет `Husky` позволяет задействовать хуки `Git`. Это означает, что появляется возможность выполнять некие действия перед выполнением коммита или перед отправкой кода репозиторий.
+
+В примере ниже перед коммитом будет выполнена комманда `"lint-staged"`
+
+```js
+{
+  "hooks": {
+    "pre-commit": "lint-staged"
+  }
+}
+```
+
+### Создание задач
+
+В `package.json` нужно дополнить поле `scripts`
+
+- lint (запускает отслеживание)
+- lint:fix (запускает исправление некоторых ощибок)
+- lint:format (запускает испоавления стиля кода)
+
+```js
+// дополнить к существующим скриптам
+"scripts": {
+  "lint": "eslint src/**/*.js",
+  "lint:fix": "eslint src/**/*.js --fix",
+  "lint:format": "prettier src/**/*.{js,css,json} --write"
+  }
+```
+
+### Настройки IDE VSCode
+
+```js
+{
+  "files.autoSave": "onFocusChange",
+  "editor.formatOnSave": true,
+  "eslint.autoFixOnSave": true,
+  "eslint.alwaysShowStatus": true
+}
+```
+[неплохая статья на хабре](https://habr.com/ru/company/ruvds/blog/428173/)
 
 Chunks
 
