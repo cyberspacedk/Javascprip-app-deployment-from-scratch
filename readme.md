@@ -1,23 +1,23 @@
 # How to deploy a project from scratch using modern JS tools.
 
-
-1. Ставим `Node` и инициализируем проект вызвав 
+1. Ставим `Node` и инициализируем проект вызвав
 
 ```js
 // с флагом -y если нужно просто заинитить проект
-npm init -y 
-// либо без флага -y если нужно заполнить поля с информацией о проекте 
+npm init -y
+// либо без флага -y если нужно заполнить поля с информацией о проекте
 ```
 
-
-2. Ставим Webpack. 
+2. Ставим Webpack.
 
 ```js
 npm i --save-dev webpack webpack-cli
 ```
-Детальный туториал я описал тут [Webpack](https://github.com/cyberspacedk/JS_POCKET/tree/master/Webpack)
 
-После установки `webpack` нужно прописать `npm-script` 
+Детальный туториал я описал тут
+[Webpack](https://github.com/cyberspacedk/JS_POCKET/tree/master/Webpack)
+
+После установки `webpack` нужно прописать `npm-script`
 
 ```js
 // package.json
@@ -26,18 +26,18 @@ npm i --save-dev webpack webpack-cli
     "build": "webpack --mode=production",
     "dev": "webpack --mode=development"
 }
-``` 
+```
 
-Скрипт с флагом `-- --mode` запустит сборку в том режиме , который укажем после `mode`. 
-Например `npm run build -- --mode development` 
+Скрипт с флагом `-- --mode` запустит сборку в том режиме , который укажем после
+`mode`. Например `npm run build -- --mode development`
 
-3. Создаем в корне `.gitignore` 
+3. Создаем в корне `.gitignore`
 
-```js 
+```js
 // .gitignore
 
-node_modules
-dist
+node_modules;
+dist;
 ```
 
 4. Ставим `Babel`.
@@ -45,7 +45,9 @@ dist
 ```js
 npm i -D @babel/core @babel/cli @babel/preset-env
 ```
-Также установим сразу и `babel-loader` для `webpack` и пропишем лоадер для `.js` в `webpack.config.js`. правила.
+
+Также установим сразу и `babel-loader` для `webpack` и пропишем лоадер для `.js`
+в `webpack.config.js`. правила.
 
 ```js
 npm i -D babel-loader
@@ -54,85 +56,105 @@ npm i -D babel-loader
 5. Ставим `react` , `react-dom`, `prop-types`.
 
 ```js
-npm i -S react react-dom prop-types 
+npm i -S react react-dom prop-types
 ```
+
 Для того чтобы `Babel` смог обработать jsx код нужно добавить пресет для react.
 
 ```js
 npm i -D @babel/preset-react
 ```
 
-Не забываем обновить  `Babel загрузчик`. Если будут файлы с расширением `.jsx` то нужно добавить их в тест регулярки. 
+Не забываем обновить `Babel загрузчик`. Если будут файлы с расширением `.jsx` то
+нужно добавить их в тест регулярки.
 
 ```js
 rules: [
-			{
-				test: /\.js|\.jsx$/, 
-				loader: 'babel-loader',
-				exclude: /node_modules/,
-				options: {
-					presets: ['@babel/preset-env', '@babel/preset-react']
-				}
-			}
-		]
+  {
+    test: /\.js|\.jsx$/,
+    loader: 'babel-loader',
+    exclude: /node_modules/,
+    options: {
+      presets: ['@babel/preset-env', '@babel/preset-react'],
+    },
+  },
+];
 ```
 
-6. Для работы с `html` файлами необходимо уставновить плагин `html-webpack-plugin`
+6. Для работы с `html` файлами необходимо уставновить плагин
+   `html-webpack-plugin`
 
 ```js
 npm i -D html-webpack-plugin
 ```
-Также нужно создать в `src` html-темплейт `index.html` с одним тегом которому дать `id` который мы указали для рендера разметки реакт. 
+
+Также нужно создать в `src` html-темплейт `index.html` с одним тегом которому
+дать `id` который мы указали для рендера разметки реакт.
 
 В настройках плагина указать этот темплейт.
 
 ```js
-plugins: [new HtmlWebpackPlugin({
-	template: './index.html'
-})]
+plugins: [
+  new HtmlWebpackPlugin({
+    template: './index.html',
+  }),
+];
 ```
-Теперь реакт будет вставлять сгенерированный `DOM` в этот тег, и `webpack` в конец `body` подключит собранный бандл.
+
+Теперь реакт будет вставлять сгенерированный `DOM` в этот тег, и `webpack` в
+конец `body` подключит собранный бандл.
 
 7. Webpack_merge
 
-Для разделения режима сборки на **development** / **production** и присоединения только необходимых нстроек к базовому конфигу. 
+Для разделения режима сборки на **development** / **production** и присоединения
+только необходимых нстроек к базовому конфигу.
+
 ```js
 npm i -D webpack-merge
 ```
-Разбиваем основной `webpack.config.js` на логические блоки. 
-- `webpack.config.base.js` 
-- `webpack.config.dev.js` 
-- `webpack.config.prod.js` 
+
+Разбиваем основной `webpack.config.js` на логические блоки.
+
+- `webpack.config.base.js`
+- `webpack.config.dev.js`
+- `webpack.config.prod.js`
 
 8. DEVSERVER
 
 Для отслеживания изменений в реальном времени
+
 ```js
 npm i -D webpack-dev-server
 ```
+
 9. DEVTOOL
 
 [read ...](https://webpack.js.org/configuration/devtool/#devtool)
 
-Для читаемости кода который сбандлили нужно прописать поле `devtool: 'source-map'`. 
-Для режима **dev** и **prod** можно указывать разные опции 
+Для читаемости кода который сбандлили нужно прописать поле
+`devtool: 'source-map'`. Для режима **dev** и **prod** можно указывать разные
+опции
 
 10. Support proposal features
 
-В стандартный пресет `babel` не входят фичи из стадии `proposal`, например как синтаксис полей класса `state = { field: value }`
+В стандартный пресет `babel` не входят фичи из стадии `proposal`, например как
+синтаксис полей класса `state = { field: value }`
 
 Чтобы `babel` смог обрабатыватть такой код нужно расширить пресеты
 
-Ставим 
+Ставим
+
 ```js
 npm i -D @babel/plugin-proposal-class-properties
 ```
+
 И добавляем в настроки `babel-loader` новый плагин
+
 ```js
 module: {
 	rules: [
 		{
-			test: /\.js|\.jsx$/, 
+			test: /\.js|\.jsx$/,
 			loader: 'babel-loader',
 			exclude: /node_modules/,
 			options: {
@@ -153,6 +175,7 @@ npm i -D css-loader style-loader
 ```
 
 После в базовом конфиге обновить массив правил - `rules`
+
 ```js
 {
 	test: /\.css$/,
@@ -165,23 +188,27 @@ npm i -D css-loader style-loader
 
 [github](https://github.com/gaearon/react-hot-loader)  
 [читаем-раз](https://gaearon.github.io/react-hot-loader/getstarted/)
-[читаем-два](https://habr.com/ru/post/433122/)  
+[читаем-два](https://habr.com/ru/post/433122/)
 
-Горячая перезагрузка позволяет перерендеривать компонент без перезагрузки страницы, тем самым избегая потери состояния компоненты.
+Горячая перезагрузка позволяет перерендеривать компонент без перезагрузки
+страницы, тем самым избегая потери состояния компоненты.
 
-Ставим пакет как `dependencies`. 
+Ставим пакет как `dependencies`.
 
 ```js
 npm i -S react-hot-loader
 ```
+
 **После нужно**
 
-- на уровне Арр импортировать `import {hot} from 'react-hot-loader/root'` ПЕРЕД импортом React  
-- при экспорте компоненты обернуть в хок `export default hot(App)`  
-- обновить плагины babel в base  конфиге 
+- на уровне Арр импортировать `import {hot} from 'react-hot-loader/root'` ПЕРЕД
+  импортом React
+- при экспорте компоненты обернуть в хок `export default hot(App)`
+- обновить плагины babel в base конфиге
+
 ```js
 {
-				test: /\.js|\.jsx$/, 
+				test: /\.js|\.jsx$/,
 				loader: 'babel-loader',
 				exclude: /node_modules/,
 				options: {
@@ -189,38 +216,48 @@ npm i -S react-hot-loader
 					plugins: ['react-hot-loader/babel','@babel/plugin-proposal-class-properties']
 				}
 			},
-```  
+```
+
 - создать новый скрипт в package.json с добавлением флага `--hot`
+
 ```js
 "dev:hot": "npm run dev -- --hot"
-```  
+```
 
 13. Bundle analyzer
 
 [инфа и опции](https://github.com/webpack-contrib/webpack-bundle-analyzer#options-for-plugin)
+
 ```js
 npm i -D webpack-bundle-analyzer
 ```
-После установки обновляем `production` конфиг  
+
+После установки обновляем `production` конфиг
+
 ```js
 const merge = require('webpack-merge');
-const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const baseConfig = require('./webpack.config.base');
 
 module.exports = merge(baseConfig, {
-    mode: 'production',
-    plugins: [ new BundleAnalyzerPlugin({
-			analyzerMode: 'static'
-		})]
-})
+  mode: 'production',
+  plugins: [
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+    }),
+  ],
+});
 ```
-Запустив режим продакшена, в браузере откроется окно в котором будет отображена полная информация о составе бандла.
 
-Передав в качестве опции `analyzerMode: 'static'` получим в папку `dist` файл `report.html` c информацие о бандле.
- 
+Запустив режим продакшена, в браузере откроется окно в котором будет отображена
+полная информация о составе бандла.
+
+Передав в качестве опции `analyzerMode: 'static'` получим в папку `dist` файл
+`report.html` c информацие о бандле.
+
 14. Babel-polyfill OR Core-JS
 
-`Babel polyfill` поддержка новых фичей js в браузерах.  
+`Babel polyfill` поддержка новых фичей js в браузерах.
 
 ```js
 npm i -S @babel/polyfill
@@ -228,14 +265,14 @@ npm i -S @babel/polyfill
 
 [read about babel polyfills...](https://babeljs.io/docs/en/babel-polyfill)
 
-После установки, чтобы не загружать всю либу, нужно определить браузеры которые нужно поддерживать 
-Посмотреть список `npx browserslist`
-Нужно прописать список браузеров в настроках `babel-loader` в `base` конфиге либо в файле конфигурации `.babelrc`
+После установки, чтобы не загружать всю либу, нужно определить браузеры которые
+нужно поддерживать Посмотреть список `npx browserslist` Нужно прописать список
+браузеров в настроках `babel-loader` в `base` конфиге либо в файле конфигурации
+`.babelrc`
 
+Babel будет применять поддержку к указанным в `targets` браузерам.
 
-Babel будет применять поддержку к указанным в `targets` браузерам. 
- 
-Детально с конфигурацией настройки целевых браузеров 
+Детально с конфигурацией настройки целевых браузеров
 [browserlist github...](https://github.com/browserslist/browserslist)
 
 ```js
@@ -246,19 +283,21 @@ presets: [['@babel/preset-env', {
     'not < 2%',
     'not ie 11'
     ],
-  useBuiltIns: 'usage' // значение 'usage' - подгрузит только те, которые необходимы . 'entry' - загрузит все 
+  useBuiltIns: 'usage' // значение 'usage' - подгрузит только те, которые необходимы . 'entry' - загрузит все
 }], '@babel/preset-react'],
 plugins: ['react-hot-loader/babel','@babel/plugin-proposal-class-properties']
   }
 },
 ```
-`Core-JS` ядро JS. Наиболее актуальный способ. 
+
+`Core-JS` ядро JS. Наиболее актуальный способ.
 
 [read ...](https://babeljs.io/blog/2019/03/19/7.4.0#core-js-3-7646)
 
 ```js
 npm i core-js
 ```
+
 После установки нужно прописать в конфиге `.babelrc`
 
 ```js
@@ -271,18 +310,18 @@ npm i core-js
 			"not < 2%",
 			"not ie 11"
       ],
-    "corejs": 3, 
+    "corejs": 3,
 		"useBuiltIns": "usage"
-	}], 
+	}],
 ```
 
+15. Browserslist.
 
-15. Browserslist. 
+Сконфигурировать целевые браузеры можно тремя способами
 
-Сконфигурировать целевые браузеры можно тремя способами  
-1. `.babelrc`  
-2. `package.json`  
-3. `.browserlistrc`  
+1. `.babelrc`
+2. `package.json`
+3. `.browserlistrc`
 
 - Также список поддерживаемых браузеров можно указать в `package.json`
 
@@ -297,7 +336,8 @@ npm i core-js
 ]
 ```
 
-- Или путем создания конфигруациооного файла `.browserslistrc` где без кавычек и с новой строки указываем список поддерживаемых браузеров
+- Или путем создания конфигруациооного файла `.browserslistrc` где без кавычек и
+  с новой строки указываем список поддерживаемых браузеров
 
 ```js
 // .browserslistrc
@@ -305,66 +345,79 @@ npm i core-js
   last 2 versions
   not dead
   not < 2%
-  not ie 11 
+  not ie 11
 ```
 
 16. React/ReactDom CDN
 
-С целью оптимизации бандла можем вынести `react` и `react-dom` в режиме продакшена, включив их  минифицированные сборки с помощью CDN.
+С целью оптимизации бандла можем вынести `react` и `react-dom` в режиме
+продакшена, включив их минифицированные сборки с помощью CDN.
 
 [ссылки на CDN](https://ru.reactjs.org/docs/cdn-links.html)
 
-В `production` конфиге нужно добавить поле `externals` в которой указать внешние источники
+В `production` конфиге нужно добавить поле `externals` в которой указать внешние
+источники
 
 ```js
 const merge = require('webpack-merge');
-const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const baseConfig = require('./webpack.config.base');
 
 module.exports = merge(baseConfig, {
-    mode: 'production',
-    plugins: [ new BundleAnalyzerPlugin({
-        analyzerMode: 'static'
-    })],
-    externals: {
-        react: 'React',
-        'react-dom': 'ReactDOM'
-    }
-})
+  mode: 'production',
+  plugins: [
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+    }),
+  ],
+  externals: {
+    react: 'React',
+    'react-dom': 'ReactDOM',
+  },
+});
 ```
 
 В файле `src/index.html` нужно прилинковать ссылки на CDN
 
 ```html
- <div id="root"></div>
-    <% if(process.env.NODE_ENV === 'production') {%>
-        <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-        <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
-    <%} %>
+<div id="root"></div>
+<% if(process.env.NODE_ENV === 'production') {%>
+<script
+  crossorigin
+  src="https://unpkg.com/react@16/umd/react.production.min.js"
+></script>
+<script
+  crossorigin
+  src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"
+></script>
+<%} %>
 ```
 
 Webpack присборке проекта прилинкует `react` и `reactDom`.
 
-17. Dynamic import support 
+17. Dynamic import support
 
-Для поддержки синтаксиса динамического импорта `React.lazy(()=> import('./component'))` нужно добавить `Babel` плагин. 
+Для поддержки синтаксиса динамического импорта
+`React.lazy(()=> import('./component'))` нужно добавить `Babel` плагин.
 
 ```js
 npm i -D @babel/plugin-syntax-dynamic-import @babel/plugin-syntax-dynamic-import-node
 ```
+
 После этого нужно обновить массив плагинов `babel` в `base` конфиге
 
 ```js
 plugins: [
-						'react-hot-loader/babel',
-						'@babel/plugin-proposal-class-properties',
-						'@babel/plugin-syntax-dynamic-import'
-					]
+  'react-hot-loader/babel',
+  '@babel/plugin-proposal-class-properties',
+  '@babel/plugin-syntax-dynamic-import',
+];
 ```
 
 18. Jest , testing-library/jest-dom , testing-library/react
 
 Уставновив jest нужно прописать скрипт в `package.json`
+
 ```js
 npm i -D jest @testing-library/jest-dom  @testing-library/react
 ```
@@ -384,28 +437,29 @@ npm i -D jest @testing-library/jest-dom  @testing-library/react
 
 - в корне создаем `jest.config.js` и `setup-tests.js`
 
-Чтобы в тестовых файлах каждый раз не импортировать например 
+Чтобы в тестовых файлах каждый раз не импортировать например
 
 ```js
 import '@testing-library/jest-dom';
 import '@testing-library/react';
 ```
 
-импорт этих модулей можно произвести единожды в файле `setup-tests.js` и затем прописать путь к нему в `jest.congif.js`
+импорт этих модулей можно произвести единожды в файле `setup-tests.js` и затем
+прописать путь к нему в `jest.congif.js`
 
 ```js
 const path = require('path');
 
-
 module.exports = {
-    setupFilesAfterEnv: [require.resolve('./setup-tests.js')]
-}
+  setupFilesAfterEnv: [require.resolve('./setup-tests.js')],
+};
 ```
 
 19. .babelrc и babel-jest
 
-Для конфигурирования `babel` удобно вынести настройки в отдельный файл `.babelrc`. 
-`Babel-loader` будет искать файл настроек `.babelrc` поэтому его можно вынести отдельно
+Для конфигурирования `babel` удобно вынести настройки в отдельный файл
+`.babelrc`. `Babel-loader` будет искать файл настроек `.babelrc` поэтому его
+можно вынести отдельно
 
 Перенесем туда из `base` кофига опции `babel`
 
@@ -429,21 +483,23 @@ module.exports = {
     ]
 }
 ```
-В `base` конфиге оставим только 
+
+В `base` конфиге оставим только
 
 ```js
 // webpack.base.config.js
 rules: [
 			{
-				test: /\.js|\.jsx$/, 
+				test: /\.js|\.jsx$/,
 				loader: 'babel-loader',
-				exclude: /node_modules/, 
+				exclude: /node_modules/,
 			},
 ```
 
-Также для работы с тестами поставим 
+Также для работы с тестами поставим
+
 ```js
-npm i -D babel-jest babel-core@bridge 
+npm i -D babel-jest babel-core@bridge
 ```
 
 Также для поддержки динамического импорта в `node`
@@ -451,6 +507,7 @@ npm i -D babel-jest babel-core@bridge
 ```js
 npm i babel-plugin-dynamic-import-node
 ```
+
 После обновим кофиг `.babelrc` добавив новое поле `env` со значением `test`
 
 ```js
@@ -458,7 +515,7 @@ npm i babel-plugin-dynamic-import-node
 		"test": {
 			"plugins": ["dynamic-import-node"]
 		}
-	} 
+	}
 ```
 
 20. Linters, code prettier, Husky
@@ -468,8 +525,10 @@ npm i babel-plugin-dynamic-import-node
 ```js
 npm i -D prettier eslint-config-airbnb eslint-config-prettier eslint-plugin-prettier eslint-plugin-react eslint-plugin-import eslint-plugin-jsx-a11y husky lint-staged babel-eslint
 ```
+
 Читаемый список
-```js 
+
+```js
 prettier
 babel-eslint
 eslint-config-airbnb
@@ -488,7 +547,8 @@ lint-staged
 - eslint
 - editorconfig
 
-Husky работает в связке с lint-staged. **До установки в проект, папка с проектом уже должна отслеживаться git**
+Husky работает в связке с lint-staged. **До установки в проект, папка с проектом
+уже должна отслеживаться git**
 
 ### Создаем файлы-конфигурцядом с package.json
 
@@ -496,8 +556,9 @@ Husky работает в связке с lint-staged. **До установки
 
 [docs editorconfig](https://editorconfig.org/#example-file)
 
-Чтобы все пользовались едиными настройками, касающимися, например, отступов или символов перевода строки, применяем файл .editorconfig. 
-Он помогает поддерживать единый набор правил в неоднородных командах.
+Чтобы все пользовались едиными настройками, касающимися, например, отступов или
+символов перевода строки, применяем файл .editorconfig. Он помогает поддерживать
+единый набор правил в неоднородных командах.
 
 ```js
 root = true
@@ -542,33 +603,53 @@ max_line_length = 80
 [docs eslint](https://eslint.org/docs/user-guide/configuring)
 
 Нужно заинитить `eslint`
+
 ```js
 npx eslint --init
 ```
 
 структура конфига `eslint`
+
 ```js
-{ 
-   env:{}, 
-   extends: {}, 
-   plugin: {}, 
-   parser: {}, 
-   parserOptions: {}, 
+{
+   env:{},
+   extends: {},
+   plugin: {},
+   parser: {},
+   parserOptions: {},
    rules: {},
 }
 ```
-- `env` — позволяет задавать **список сред**, код для которых планируется проверять. В нашем случае тут имеются свойства es6, browser и node, установленные в true. Параметр **es6** включает возможности ES6 за исключением модулей (эта возможность автоматически устанавливает, в блоке parserOptions, параметр ecmaVersion в значение 6). Параметр **browser** подключает глобальные переменные браузера, такие, как Windows. Параметр **node** добавляет глобальные переменные среды Node.js и области видимости, например — global. 
-[подробно о env...](https://eslint.org/docs/user-guide/configuring#specifying-environments)
 
-- `extends` — представляет собой массив строк с конфигурациями, при этом каждая дополнительная конфигурация расширяет предыдущую.  
+- `env` — позволяет задавать **список сред**, код для которых планируется
+  проверять. В нашем случае тут имеются свойства es6, browser и node,
+  установленные в true. Параметр **es6** включает возможности ES6 за исключением
+  модулей (эта возможность автоматически устанавливает, в блоке parserOptions,
+  параметр ecmaVersion в значение 6). Параметр **browser** подключает глобальные
+  переменные браузера, такие, как Windows. Параметр **node** добавляет
+  глобальные переменные среды Node.js и области видимости, например — global.
+  [подробно о env...](https://eslint.org/docs/user-guide/configuring#specifying-environments)
 
-- `plugins` — тут представлены правила линтинга, которые мы хотим использовать. У нас применяются правила `["react", "import", "prettier", "jsx-a11y"]`
+- `extends` — представляет собой массив строк с конфигурациями, при этом каждая
+  дополнительная конфигурация расширяет предыдущую.
 
-- `parser` — по умолчанию ESLint использует синтаксический анализатор Espree, но, так как мы работаем с Babel, нам надо пользоваться babel-esLint.
+- `plugins` — тут представлены правила линтинга, которые мы хотим использовать.
+  У нас применяются правила `["react", "import", "prettier", "jsx-a11y"]`
 
-- `parserOptions` — так как мы изменили стандартный синтаксический анализатор на babel-eslint, нам необходимо задать и свойства в этом блоке. Свойство **ecmaVersion**, установленное в значение 6, указывает **ESLint** на то, что проверяться будет ES6-код. Так как код мы пишем в EcmaScript-модулях, свойство **sourceType** установлено в значение module. И, наконец, так как мы используем React, что означает применение JSX, то в свойство **ecmaFeatures** записывается объект с ключом jsx, установленным в true.
+- `parser` — по умолчанию ESLint использует синтаксический анализатор Espree,
+  но, так как мы работаем с Babel, нам надо пользоваться babel-esLint.
 
-- `rules` — эта часть файла позволяет настраивать правила ESLint. Все правила, которые мы расширили или добавили с помощью плагинов, можно менять или переопределять, и делается это именно в блоке rules. 
+- `parserOptions` — так как мы изменили стандартный синтаксический анализатор на
+  babel-eslint, нам необходимо задать и свойства в этом блоке. Свойство
+  **ecmaVersion**, установленное в значение 6, указывает **ESLint** на то, что
+  проверяться будет ES6-код. Так как код мы пишем в EcmaScript-модулях, свойство
+  **sourceType** установлено в значение module. И, наконец, так как мы
+  используем React, что означает применение JSX, то в свойство **ecmaFeatures**
+  записывается объект с ключом jsx, установленным в true.
+
+- `rules` — эта часть файла позволяет настраивать правила ESLint. Все правила,
+  которые мы расширили или добавили с помощью плагинов, можно менять или
+  переопределять, и делается это именно в блоке rules.
 
 Примерный конфиг
 
@@ -617,7 +698,7 @@ npx eslint --init
     "FileReader": true,
     "Blob": true,
     "navigator": true
-  }, 
+  },
   "settings": {
     "react": {
       "version": "16.10.2"
@@ -625,31 +706,34 @@ npx eslint --init
   }
 }
 ```
-Файл `.eslintignore`.
-Этот файл принимает список путей, представляющий папки, содержимое которых не должно обрабатываться с помощью ESLint.
 
-- `/.git` — мне не нужно, чтобы ESLint проверял файлы, относящиеся к Git.  
-- `/.vscode` — в проекте имеется эта папка из-за того, что я использую VS Code. Тут редактор хранит конфигурационные сведения, которые можно задавать для каждого проекта. Эти данные тоже не должны обрабатываться линтером.
+Файл `.eslintignore`. Этот файл принимает список путей, представляющий папки,
+содержимое которых не должно обрабатываться с помощью ESLint.
+
+- `/.git` — мне не нужно, чтобы ESLint проверял файлы, относящиеся к Git.
+- `/.vscode` — в проекте имеется эта папка из-за того, что я использую VS Code.
+  Тут редактор хранит конфигурационные сведения, которые можно задавать для
+  каждого проекта. Эти данные тоже не должны обрабатываться линтером.
 - `node-modules` — файлы зависимостей также не нужно проверять линтером.
 
 - LINT-STAGED **.lintstagedrc**
 
 [docs lint-staged](https://github.com/okonet/lint-staged)
 
-Пакет `Lint-staged` позволяет проверять с помощью линтера индексированные файлы, что помогает предотвратить отправку в репозиторий кода с ошибками.
+Пакет `Lint-staged` позволяет проверять с помощью линтера индексированные файлы,
+что помогает предотвратить отправку в репозиторий кода с ошибками.
 
 ```js
-{
-  "linters": {
-    "src/**/*.{json,css}": ["prettier --write", "git add"],
-    "src/**/*.js": ["prettier --write", "eslint --fix", "git add"]
-  }
-}
+"src/**/*.{json,css}": ["prettier --write", "git add"],
+"src/**/*.js": ["prettier --write", "eslint --fix", "git add"]
+
 ```
 
 - HUSKY **.huskyrc**
 
-Пакет `Husky` позволяет задействовать хуки `Git`. Это означает, что появляется возможность выполнять некие действия перед выполнением коммита или перед отправкой кода репозиторий.
+Пакет `Husky` позволяет задействовать хуки `Git`. Это означает, что появляется
+возможность выполнять некие действия перед выполнением коммита или перед
+отправкой кода репозиторий.
 
 В примере ниже перед коммитом будет выполнена комманда `"lint-staged"`
 
@@ -688,6 +772,7 @@ npx eslint --init
   "eslint.alwaysShowStatus": true
 }
 ```
+
 [неплохая статья на хабре](https://habr.com/ru/company/ruvds/blog/428173/)
 
 Chunks

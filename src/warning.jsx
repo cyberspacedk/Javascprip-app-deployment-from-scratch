@@ -1,11 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const Warning = () => {
-    return (
-        <div>
-            Calm down
-        </div>
-    )
-}
+  return <div>Calm down</div>;
+};
 
-export default Warning
+export default Warning;
