@@ -1,5 +1,5 @@
-/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/state-in-constructor */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/button-has-type */
 import { hot } from 'react-hot-loader/root';
 import React from 'react';
