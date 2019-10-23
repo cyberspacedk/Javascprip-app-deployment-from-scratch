@@ -13,7 +13,7 @@ npm init -y
 ```js
 npm i --save-dev webpack webpack-cli
 ```
-
+Тут разверуть установки из туториала и описать их 
 Детальный туториал я описал тут
 [Webpack](https://github.com/cyberspacedk/JS_POCKET/tree/master/Webpack)
 
