@@ -14,7 +14,7 @@
       - [context](#Context)  
       - [mode](#Mode)   
 
-  - [Пакеты](#Пакеты)  
+  - [Loaders_Plugins](#Пакеты)  
     - [Babel](#babel)  
       - [Support_proposal features](#Support_proposal_features)
       - [babel-polyfill](#Babel_polyfill)
@@ -268,7 +268,7 @@ module.exports = {
 }
 ``` 
   
-###  Пакеты
+###  Loaders_Plugins
 
 #### Babel
 
