@@ -37,7 +37,7 @@
   - [Chunks](#Chunks)
   - [GH Pages](#GH_PAGES)
 
-[Config splitting](Config_splitting)
+#### [Config splitting](Config_splitting)
 
 ### [Gitignore](#Gitignore)
 
@@ -268,7 +268,7 @@ module.exports = {
 }
 ``` 
   
-### 4. Пакеты
+###  Пакеты
 
 #### Babel
 
@@ -1439,7 +1439,7 @@ npm i babel-plugin-dynamic-import-node
 
 **Linters, Prettier, Husky**
 
-### Ставим пакеты
+Ставим пакеты
 
 ```js
 npm i -D prettier eslint-config-airbnb eslint-config-prettier eslint-plugin-prettier eslint-plugin-react eslint-plugin-import eslint-plugin-jsx-a11y husky lint-staged babel-eslint
