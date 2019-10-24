@@ -124,7 +124,7 @@ module.exports = {
 }; 
 ``` 
 
-#### [Loaders]
+#### Loaders
   
 - Загрузчики обрабатывают определенные типы файлов. 
 - По умолчанию `Webpack` может обрабатывать только `.js` и `.json` файлы.
@@ -520,8 +520,8 @@ plugins: [
 #### HotLoader
 
 [github](https://github.com/gaearon/react-hot-loader)  
-[читаем-раз](https://gaearon.github.io/react-hot-loader/getstarted/)
-[читаем-два](https://habr.com/ru/post/433122/)
+[читаем-раз](https://gaearon.github.io/react-hot-loader/getstarted/)  
+[читаем-два](https://habr.com/ru/post/433122/)  
 
 Горячая перезагрузка позволяет перерендеривать компонент без перезагрузки
 страницы, тем самым избегая потери состояния компоненты.
@@ -849,7 +849,7 @@ module.exports = {
 }
 ```
 
-- **прописываем** его в файл конфигурации webpack ** в загрузчики css и scss. **
+- **прописываем** его в файл конфигурации webpack **в загрузчики css и scss.**
 - поскольку post-css может рабоать только с .css файлами, то нужно в массиве загрузчиков **CSS ставить его первым**, а если мы работаем с **SCSS** то указываем его **ПОСЛЕ sass-loader НО перед css-loader**
 
  
@@ -1326,6 +1326,8 @@ node_modules/
 
 #### Browserslist
 
+[github browserlists...](https://github.com/browserslist/browserslist)
+
 Сконфигурировать целевые браузеры можно тремя способами
 
 1. `.babelrc`
@@ -1351,17 +1353,22 @@ node_modules/
 ```js
 // .browserslistrc
 
-  last 2 versions
-  not dead
-  not < 2%
-  not ie 11
+[development]
+last 1 chrome version
+last 1 firefox version
+last 1 safari version
+
+[production]
+>0.2%
+not dead
+not op_mini all
 ```
 
 
 
 #### Testing 
 
-Jest, testing-library/jest-dom , testing-library/react
+**Jest**, **testing-library/jest-dom** , **testing-library/react**
 
 Уставновив jest нужно прописать скрипт в `package.json`
 
@@ -1420,17 +1427,17 @@ npm i babel-plugin-dynamic-import-node
 После обновим кофиг `.babelrc` добавив новое поле `env` со значением `test`
 
 ```js
-	"env": {
-		"test": {
-			"plugins": ["dynamic-import-node"]
-		}
-	}
+"env": {
+  "test": {
+    "plugins": ["dynamic-import-node"]
+  }
+}
 ```
 
 #### Code_quality
 
 
-Linters, prettier, Husky
+**Linters, Prettier, Husky**
 
 ### Ставим пакеты
 
@@ -1461,9 +1468,7 @@ lint-staged
 
 Husky работает в связке с lint-staged. **До установки в проект, папка с проектом
 уже должна отслеживаться git**
-
-### Создаем файлы-конфигурцядом с package.json
-
+ 
 #### Editorconfig 
 
 **.editorconfig**
@@ -1518,7 +1523,10 @@ max_line_length = 80
 
 **.eslintrc**
 
-[docs eslint...](https://eslint.org/docs/user-guide/configuring)
+[docs eslint...](https://eslint.org/docs/user-guide/configuring)  
+[Airbnb styleguide for JS](https://github.com/leonidlebedev/javascript-airbnb)  
+[Airbnb styleguide for React](https://github.com/leonidlebedev/javascript-airbnb/tree/master/react)  
+
 
 Нужно заинитить `eslint`
 
@@ -1612,11 +1620,13 @@ npx eslint --init
 
 Файл `.eslintignore`. Этот файл принимает список путей, представляющий папки, содержимое которых не должно обрабатываться с помощью ESLint.
 
-- `/.git` — мне не нужно, чтобы ESLint проверял файлы, относящиеся к Git.
-- `/.vscode` — в проекте имеется эта папка из-за того, что я использую VS Code.
+```js
+`/.git` — мне не нужно, чтобы ESLint проверял файлы, относящиеся к Git.
+`/.vscode` — в проекте имеется эта папка из-за того, что я использую VS Code.
   Тут редактор хранит конфигурационные сведения, которые можно задавать для
   каждого проекта. Эти данные тоже не должны обрабатываться линтером.
-- `node-modules` — файлы зависимостей также не нужно проверять линтером.
+`node-modules` — файлы зависимостей также не нужно проверять линтером.
+```
 
 #### Lint_staged
 
@@ -1637,6 +1647,8 @@ npx eslint --init
 #### Husky 
 
 **.huskyrc**
+
+[docs husky](https://github.com/typicode/husky)
 
 Пакет `Husky` позволяет задействовать хуки `Git`. Это означает, что появляется возможность выполнять некие действия перед выполнением коммита или перед отправкой кода репозиторий.
 
@@ -1677,6 +1689,7 @@ npx eslint --init
   "eslint.alwaysShowStatus": true
 }
 ``` 
-[неплохая статья на хабре](https://habr.com/ru/company/ruvds/blog/428173/)
+[неплохая статья о code quality на хабре ](https://habr.com/ru/company/ruvds/blog/428173/)
 
 
+![pic](http://i.piccy.info/i9/6e8562bb0b74c130c7f22ca5287744a6/1571940814/24079/1333692/all.jpg)
