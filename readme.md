@@ -1,4 +1,4 @@
-# How to deploy a project from scratch using modern JS tools.
+### How to deploy a project from scratch using modern JS tools.
 
 ## Table of contents
  
@@ -37,7 +37,11 @@
   - [Chunks](#Chunks)
   - [GH Pages](#GH_PAGES)
 
+<<<<<<< HEAD
 #### [Config splitting](Config_splitting)
+=======
+### [Config splitting](Config_splitting)
+>>>>>>> 075582be827cfb81de3fc82db409c7142bbd6fe4
 
 ### [Gitignore](#Gitignore)
 
