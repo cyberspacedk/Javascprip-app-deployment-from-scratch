@@ -14,7 +14,7 @@
       - [context](#Context)  
       - [mode](#Mode)   
 
-  - [Loaders_Plugins](#Пакеты)  
+  - [Loaders_Plugins](#Loaders_Plugins)  
     - [Babel](#babel)  
       - [Support_proposal features](#Support_proposal_features)
       - [babel-polyfill](#Babel_polyfill)
