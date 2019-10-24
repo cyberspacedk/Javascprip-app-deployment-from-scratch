@@ -1,4 +1,4 @@
-# How to deploy a project from scratch using modern JS tools.
+### How to deploy a project from scratch using modern JS tools.
 
 ## Table of contents
  
