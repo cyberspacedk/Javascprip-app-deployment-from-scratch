@@ -31,13 +31,13 @@
     - [Clean](#Clean)  
     - [Image](#IMAGE)   
 
-  - [Bundle analyzer](Bundle_Analyzer)
+  - [Bundle analyzer](#Bundle_Analyzer)
   - [Devserver](#DEVSERVER)  
   - [Devtool](#DEVTOOL)
   - [Chunks](#Chunks)
   - [GH Pages](#GH_PAGES)
 
-#### [Config splitting](Config_splitting)
+#### [Config splitting](#Config_splitting)
 
 ### [Gitignore](#Gitignore)
 
