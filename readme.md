@@ -2,7 +2,8 @@
 
 ## Table of contents
  
-## [Webpack](#Концепт_Webpack)  
+### [Webpack](#Webpack)
+  - [Концепт](#Концепт_Webpack)  
   - [Entry](#Entry)  
   - [Output](#Output)  
   - [Loaders](#Loaders)  
@@ -38,13 +39,13 @@
 
 [Config splitting](Config_splitting)
 
-## [Gitignore](#Gitignore)
+### [Gitignore](#Gitignore)
 
-## [Browserlist](#Browserslist)
+### [Browserlist](#Browserslist)
 
-## [Testing](#Testing)
+### [Testing](#Testing)
 
-## [Code quality](#Code_quality)
+### [Code quality](#Code_quality)
   - [Editorconfig](#Editorconfig)
   - [Prettier](#Prettier)
   - [Eslint](#Eslint)
@@ -53,7 +54,7 @@
 
 ------------
 
-## WEBPACK
+## Webpack
 
 Webpack - это менеджер модульных зависимостей, сборщик модулей.
 Webpack анализирует ваше дерево зависимостей, создает для них модули и объединяет всю сеть в управляемые выходные файлы.
