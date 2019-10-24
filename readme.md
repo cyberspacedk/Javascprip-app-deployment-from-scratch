@@ -37,7 +37,7 @@
   - [Chunks](#Chunks)
   - [GH Pages](#GH_PAGES)
 
-[Config splitting](Config_splitting)
+### [Config splitting](Config_splitting)
 
 ### [Gitignore](#Gitignore)
 
