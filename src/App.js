@@ -3,7 +3,6 @@
 /* eslint-disable react/button-has-type */
 import { hot } from 'react-hot-loader/root';
 import React from 'react';
-import './style.css';
 
 const Message = React.lazy(() => import('./warning.jsx'));
 
