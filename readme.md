@@ -1,5 +1,3 @@
-### How to deploy a project from scratch using modern JS tools.
-
 ## Table of contents
  
 ### [Webpack](#Webpack)
