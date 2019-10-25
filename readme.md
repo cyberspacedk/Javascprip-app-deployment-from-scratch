@@ -1,3 +1,5 @@
+![pic](http://i.piccy.info/i9/b6d11db08a3cc3fee10d62a051082c5b/1571984134/191246/1333692/HOW_TO_DEPLOY_A_PROJECT.png)
+
 ## Table of contents
  
 ### [Webpack](#Webpack)
