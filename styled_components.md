@@ -1,6 +1,7 @@
 ![pic](http://i.piccy.info/i9/ec5c91dae17c0a0970b9e708b5255c8e/1556390885/40738/1314369/1_6E_EG6HczqSSsEQFgFlG_A.jpg)
 
 -  [Intro](#Intro)  
+-  [Under the hood](#Under_the_hood)
 -  [Installation](#Installation)  
 -  [Простая стилизация](#Simple_style)  
 -  [Используем переменные](#Using_variables)  
@@ -26,26 +27,182 @@
 
 Styled components решают такие задачи как:
 
-- Автоматический критический CSS
+- Автоматический критический CSS  
 `styled-components` **отслеживает**, какие компоненты **отображаются** на странице, и **вводит** их стили в комбинации с `code splitting`
 > ! Лишние стили не загружаются, только необхожимые для отображения
 
-- Нет кофликтов имен классов
+- Модульность / Нет кофликтов имен классов  
 `styled-components` генерирует **уникальные имена** классов для ваших стилей.  
 
-- Очистка CSS
+- Нет мертвого кода / Очистка CSS  
 При удалении компонента удаляется также связынные с ним стили
 
-- Динамическая стилизация
-Стили компонента динамически меняются в зависимости от переданных `props` или `theme`
+- Динамическая стилизация  
+Стили компонента можем динамически менять в зависимости от переданных `props` или `theme`
 
-- Конкретные стили для конкретной компоненты
+- Конкретные стили для конкретной компоненты  
 Нет необходимости искать по кодовой базу где лежат стили для компоненты
 
-- Автоматическое проставление вендорных префиксов 
+- Автоматическое проставление вендорных префиксов  и минификация css
 Пишем css в по последним стандартам, прейиксы расставит `styled components`
 
+- Нет необходимости создавать дополнительные файлы стилей
+
 Использует css-препроцессор  [stylis](https://github.com/thysultan/stylis.js)
+
+### Under_the_hood
+
+Когда впервые импортируется библиотека в приложение, она создает внутреннюю переменную-счетчик для подсчета всех компонентов, созданных с помощью `styled`  
+
+Когда `styled-components` создает новый компонент
+- инкрементируется счетчик  
+- создается внутренний идентификатор `componentId`, который составляется из разных значений  
+
+```js
+counter++;
+const componentId = 'sc-' + hash('sc' + counter); // на выходе получим sc-bdVaJa
+```
+
+Как только идентификатор создан, `styled-components` вставляет  
+- новый HTML элемент `<style> ` в `<head>`  
+- добавляет специальный маркер комментария с **componentId** к элементу, который будет использоваться позже.  
+
+```html
+<style data-styled-components>
+  /* sc-component-id: sc-bdVaJa */
+</style>
+```
+
+Когда новый компонент создан  
+- **componentId**   
+- и целевой компонент, который мы передали в `styled`   
+сохраняются в статических полях  
+
+```js
+StyledComponent.componentId = componentId;
+StyledComponent.target = TargetComponent;
+```
+
+> Компоненты, созданные с помощью `styled` наследуются от класса `BaseStyledComponent`, который реализует несколько методов жизненного цикла.
+
+#### При маунте компоненты **componentWillMount** 
+`styled-component` запускает в свою очередь свой жизненный цикл 
+
+1. Evaluating tagged template  
+Оценка написанного в шаблонной строке (парсинг написанного css)  
+
+2. Generating CSS class name  
+Генерация уникального css className для компонеты, который состоит из хеша **componentId** и **оцененной шаблонной строки**  
+
+В примере ниже, на выхое получим className вида **jsZVzX**  
+```js
+const className = hash(componentId + evaluatedStyles); 
+```
+> Затем это имя класса сохраняется в состоянии компонента как **generatedClassName** 
+
+```js
+this.state.generatedClassName
+```
+
+3. CSS Preprocessing  
+Здесь на помощь приходит сверхскоростной CSS-препроцессор stylis, который помогает получить правильную строку CSS
+
+```js
+// получим .jsZVzX
+const selector = '.' + className;  
+
+// ф-ция которая соединит написанное в шаблонной строке с классом
+const cssStr = stylis(selector, evaluatedStyles); 
+```
+
+В результате получим валидный css
+
+```css
+.jsZVzX {
+  font-size: 24px;
+  color: coral;
+  padding: 0.25rem 1rem;
+  border: solid 2px coral;
+  border-radius: 3px;
+  margin: 0.5rem;
+}
+.jsZVzX:hover{
+  background-color: bisque;
+}
+```
+
+4. Injecting CSS string into the page  
+Теперь CSS должен быть вставлен в элемент <style> в <head> страницы сразу после маркера комментария компонента:
+
+```html
+<style data-styled-components>
+  /* sc-component-id: sc-bdVaJa */
+  .sc-bdVaJa {} 
+
+  /* сгенерированные css селекторы с правилами */
+  .jsZVzX{ 
+    font-size:24px;
+    color:coral; 
+  }  
+
+  .jsZVzX:hover{
+    background-color:bisque;
+  }
+</style>
+```
+
+#### При рендере компоненты. Вызов метода **render()**
+
+После того, как все закончилось с CSS, `styleled-components` просто нужно создать элемент с соответствующим className:
+
+```js
+//  Получаем те поля которые были созданы ранее
+const TargetComponent = this.constructor.target; 
+const componentId = this.constructor.componentId;
+const generatedClassName = this.state.generatedClassName;
+
+// формируем className из 
+return ( 
+  <TargetComponent 
+    {...this.props} 
+    className={this.props.className + ' ' + componentId + ' ' + generatedClassName}
+  />
+);
+```
+`styled-components` составляет className основываясь на    
+- props.className - необязательно, передается родительским компонентом.   
+- componentId - уникальный идентификатор компонента   
+- generateClassName - uniq для каждого экземпляра компонента, который имеет действующие правила CSS
+
+Выглядит так 
+
+```js
+<button class="sc-bdVaJa jsZVzX">I'm a button</button>
+```
+
+### При изменении `props` компоненты . **componentWillReceiveProps**.
+
+При изменении props компонент перерендеривается, если наши css-стили зависят от props то будет сгенерирован весь цикл  событий как при **componentWillMount**  
+
+1. Evaluate the tagged template.  
+2. Generate the new CSS class name.  
+3. Preprocess the styles with stylis.   
+4. Inject the preprocessed CSS into the page.    
+
+Если посмотреть в devTool на сгенерированный DOM то увидим, что для компоненты с id `sc-bdVaJa` генерируются каждый раз новый css-селектор. Изменяется `font-size`
+
+```html
+<style data-styled-components>
+  /* sc-component-id: sc-bdVaJa */
+  .sc-bdVaJa {} 
+  .jsZVzX{font-size:24px;color:coral; } .jsZVzX:hover{background-color:bisque;}
+  .kkRXUB{font-size:25px;color:coral; } .kkRXUB:hover{background-color:bisque;}
+  .jvOYbh{font-size:26px;color:coral; } .jvOYbh:hover{background-color:bisque;}
+  .ljDvEV{font-size:27px;color:coral; } .ljDvEV:hover{background-color:bisque;}
+</style>
+```
+
+_________________________
 
 ### Installation
 
@@ -478,6 +635,7 @@ function App() {
 
 export default App;
 ```
+
 ### Animations
 
 CSS-анимации с `@keyframes` не ограничиваются одним компонентом, чтобы они были глобальными и избежать конфликтов имен, нужно использовать  импортированный `keyframes`, который сгенерирует уникальный экземпляр
