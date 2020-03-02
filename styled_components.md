@@ -1,5 +1,7 @@
 ![pic](http://i.piccy.info/i9/ec5c91dae17c0a0970b9e708b5255c8e/1556390885/40738/1314369/1_6E_EG6HczqSSsEQFgFlG_A.jpg)
 
+-  ![pic](http://i.piccy.info/i9/ec5c91dae17c0a0970b9e708b5255c8e/1556390885/40738/1314369/1_6E_EG6HczqSSsEQFgFlG_A.jpg)
+
 -  [Intro](#Intro)  
 -  [Under the hood](#Under_the_hood)
 -  [Installation](#Installation)  
@@ -7,13 +9,12 @@
 -  [Используем переменные](#Using_variables)  
 -  [Props](#Props)  
 -  [Ховер](#Ховер)  
--  [Наследование стилей](#Extending_Styles)  
+-  [Наследование стилей](#Inheritans)  
 -  [Стили для вложенных елементов](#Style_for_inside_element)  
 -  [Pseudoelements, pseudoselectors, and nesting](#Pseudoelements_pseudoselectors_nesting)  
--  [Attributes](#attributes)  
--  [Клонирование компоненты](#Deep_clone)  
+-  [Attributes](#attributes)   
 -  [Медиа правила](#Media_Queries)  
--  [Хелперы](#СSS_helper)  
+-  [Хелперы](#Helper)  
 -  [Миксины](#Mixins)  
 -  [Глобальные стили](#Global_Styles)  
 -  [Animations](#Animations)  
@@ -236,7 +237,7 @@ import styled from "styled-components";
 ### Simple_style
 
 Создаем компонент , записываем в поле styled тот html тег который появится в разметке
-Открываем бэктики и пишем обычный css
+В `temlate literal` пишем привычный css
 
 ```jsx
 const Button = styled.button`
@@ -249,7 +250,7 @@ const Button = styled.button`
 
 ### Using_variables
 
-Можно использовать переменные подобно SASS. для етого вставляем их используя стандартную втавку JS `${...}`
+Использование переменных аналогично вставке JS выражений в TL.  `${...}` 
 
 ```jsx
 let size = 12;
@@ -267,7 +268,7 @@ const Button = styled.button`
 
 ### Props
 
-В свойство, которое будет завистель от переданного `props` можно передать  функцию, которая в агрументах получит объект `props` и возвращать из ф-ции необходимый `css`
+В CSS свойство, которое будет зависеть от переданного `props` передаем функцию, которая в агрументах получит ссылку на объект `props` компоненты и в зависимости от значений `props` возвращаем из ф-ции необходимый `css`
 
 ```jsx
 const Button = styled.button` 
@@ -280,9 +281,9 @@ const Button = styled.button`
 ```
 ### Ховер
 
-Если ховер пишем на сам елемент, ТО синтаксис подобно scss.
-&:hover{....}
-
+Правила аналогичные SCSS. 
+ 
+пример для срабатывания hover на родителе
 ```jsx
 const Title = styled.h2`
   background-color: aquamarine;
@@ -293,11 +294,8 @@ const Title = styled.h2`
   }
 `;
 ```
-
-Если ховер на должен отработать на другом елементе то нужно вставить тот компонент или елемент на котором должны проихойти изменения
-
-```jsx
-// При наведении на родителя стили сработают
+пример для срабатывания hover на дочернем элементе
+```jsx 
 
 const Controls = styled.div`
   //на компоненте Buttom
@@ -312,9 +310,9 @@ const Controls = styled.div`
 `;
 ```
 
-### Extending_Styles
+### Inheritans
 
-Если необходимо наследовать стили от другого компонента, то следует передать этот компонент в метод `styled(...)`, а в бектиках пишем уже если нужно переопределить или добавить что то
+Если необходимо наследовать стили от другой компоненты, то следует передать этот компонент в метод `styled(...)`, а в TL указываем переопределяющие CSS правила
 
 ```jsx
 // Наследуемся от компоненты Button и переопределям только цвет шрифта
@@ -323,28 +321,28 @@ const Cancel = styled(Button)`
 `;
 ```
 
-### Style_for_inside_element
+### Style_for_children
 
-Чтобы не создавать новый styled компонент, можно в родительском css styled блоке писать правила для вложенных елементов, по селектору (класса, тега)
+Чтобы не создавать новый `styled` компонент, можно в родительском css styled блоке писать правила для вложенных елементов, по селектору (класса, тега и т.п)
 
 ```jsx
 // Родительский блок
 const Appheader = styled.header`
   padding: 10px;
   text-align: center;
-  // селектор дочернего елемента, можно и по селектору тега span
+  // правила для дочернего елемента с классом .color
   .color {
     background-color: yellow;
     border: 2px solid #000;
     font-weight: 800;
   }
 `;
-
-//---------
+ 
 <Appheader>
   <span className="color">App header</span>
 </Appheader>;
 ```
+
 ### Pseudoelements_pseudoselectors_nesting
 
 Использование символа **&**
@@ -405,74 +403,28 @@ const GlobalStyle = createGlobalStyle`
 
 ### Attributes 
 
-Для управления атрибутами элементы , сущуствует метод `attrs` который принимает аргументом ф-ция , в которой доступен объект `props` в зависимоти от которого можем управлять атрибутами для компоненты
+Для управления атрибутами элемента, сущуствует метод `attrs` который принимает аргументом ф-цию, в которой доступна ссылка на объект `props` в зависимости от значения которого можем управлять атрибутами для компоненты
 
-- Пример простого добавления атрибута к элементу
-```js
-const PasswordInput = styled.input.attrs(props => ({
-  // Every <PasswordInput /> should be type="password"
-  type: "password"
-}))``
-
-// This specific one is hidden, so let's set aria-hidden
-<PasswordInput aria-hidden="true" />
-```
-- Пример с сеттингом атрибута в зависимости от `props` и дальнейшей стилизацией 
+- Пример с сеттингом атрибута и его значения в зависимости от `props` и дальнейшей стилизацией 
 
 ```js
-const Input = styled.input.attrs(props => ({
-  // we can define static props
-  type: props.password ? "password" : "text, 
-  // or we can define dynamic ones
-  size: props.size || "1em",
+const Input = styled.input.attrs(props => ({ 
+  type: props.password ? "password" : "text,  
 }))`
   color: palevioletred;
   font-size: 1em;
   border: 2px solid palevioletred;
-  border-radius: 3px;
-
-  /* here we use the dynamically computed prop */
+  border-radius: 3px; 
   margin: ${props => props.size};
   padding: ${props => props.size};
-`;
-
-```
-
-### Deep_clone
-
-Ссылка на компонент с потрохами и переназначение стилей.
-
-Выбираем компонент который хотим наследовать, передаем ему в props className и назначаем его в оберточном елементе. Пустой className нужен ВЕРОЯТНО для того чтобы react не назначал свой
-
-```jsx
-const Description = ({ className }) => (
-  <div className={className}>
-    <p>Some text</p>
-    <span>description</span>
-  </div>
-);
-```
-
-Создаем копию вызвав метод styled куда передаем наследуемый компонент. в бэктиках переназначаем если необходимо стили для каждго из елементов можно отдельно
-
-```jsx
-const SubDescription = styled(Description)`
-  p {
-    padding: 0 30px;
-    font-weight: 700;
-  }
-  span {
-    color: blue;
-  }
-`;
+`; 
 ```
 
 ### Media_Queries
 
-В `` указываем директиву @media и погнали. Можно внутри указывать компонент и назначать стили для нее
+Стандартное использование директивы `@media`
 
-```jsx
-/
+```jsx 
 const Controls = styled.div`
   button {
     background-color: palevioletred;
@@ -492,9 +444,9 @@ const Controls = styled.div`
 
 ```
 
-### СSS_helper
+### Helper
 
-Можно напистаь переменную миксин/хелпер и использовать ее в стилях компонента.
+Можно объявить переменную миксин/хелпер и использовать ее в стилях компоненты.
 
 - если хелпер это просто набор css правил то пишем без вызова метода css
 - если в хелпере будут вызываться функции или динамически подставляться пропсы, тогда нужно заимпортить css модуль из styled-component
@@ -514,11 +466,9 @@ const centered = css`
   transform: translate(-50%, -50%);
 `;
 ```
+Используем этот хелпер например в медиа правилах.
 
-Используем этот хелпер например в медиаправилах.
-
-```jsx
-// кнопка
+```jsx 
 const Button = styled.button`
   padding: 25px;
   background-color: palevioletred;
@@ -554,6 +504,7 @@ const position = ({posX =0; posY=0}={})=> css`
     top: ${posY};
     left: ${posX};
 `;
+
 const boxSize = ({ w = "100px", h = "100px" } = {}) => css`
   width: ${w};
   height: ${h};
@@ -586,15 +537,15 @@ export default styled(Footer)`
 
 Для установки глобальных стилей, типа нормализации, шрифтов и т.п необходимо
 
-- импортировать createGlobalStyle из styled-components
+- импортировать `createGlobalStyle` из `styled-components`
 
 ```jsx
 import { createGlobalStyle } from "styled-components";
 ```
 
-- в корне scr создать файл например Globalstyles
+- в корне scr создать файл например `Globalstyles`
 
-- в файле создать переменную, куда прописать все глобальные стили
+- в файле создать переменную, куда прописать все глобальные стили в `createGlobalStyle`
 
 ```jsx
 const GlobalStyle = createGlobalStyle`
@@ -616,7 +567,7 @@ body {
 export default GlobalStyle;
 ```
 
-- заимпортить переменную в App компоненте и поместить ее в конец компоненты
+- заимпортить переменную в `entry point` приложения и поместить ее в конец компоненты
 
 ```jsx
 import React from "react";
@@ -637,11 +588,11 @@ export default App;
 ```
 
 ### Animations
-
+ 
 CSS-анимации с `@keyframes` не ограничиваются одним компонентом, чтобы они были глобальными и избежать конфликтов имен, нужно использовать  импортированный `keyframes`, который сгенерирует уникальный экземпляр
 
 ```js
-// Create the keyframes
+// Создаем анимацию
 const rotate = keyframes`
   from {
     transform: rotate(0deg);
@@ -649,11 +600,10 @@ const rotate = keyframes`
 
   to {
     transform: rotate(360deg);
-  }
-  
+  } 
 `;
 
-// Here we create a component that will rotate everything we pass in over two seconds
+// используем созданную анимацию
 const Rotate = styled.div`
   display: inline-block;
   animation: ${rotate} 2s linear infinite;
@@ -700,7 +650,7 @@ export default styled(Footer)`
 ```
 ### Specificity
 
-В случае когда css передается и как styled и как css селектор, который потом указывается в свойтсве `className` больше специфичность будет у `styled` 
+В случае когда css передается и как styled и как css селектор, который потом указывается в свойстве `className` больше специфичность будет у `styled` 
 
 По умолчанию styled-компоненты внедряют свои стили во время выполнения кода в конце <head>. 
 Таким образом, его стили побеждают другие селекторы одного класса.
@@ -724,7 +674,7 @@ const MyComponent = styled.div`background-color: green;`;
 
 > [babel-plugin-styled-components-css-namespace](https://github.com/QuickBase/babel-plugin-styled-components-css-namespace)
 
-который позволяет увеличть специфичность разными способами
+который позволяет увеличить специфичность разными способами
 
 Также существует способ добавить специфичности и в самой библиотеке `styled components`
 
