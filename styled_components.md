@@ -24,12 +24,7 @@
   - [styled](#styled)  
   - [withTheme](#withTheme)
 
-- [Under the hood](#Under_the_hood)
-
-- [Issues with specificity](#specificity)  
-- [Server Side Rendering](#SSR)  
-- [nextjs setup](#nextjs_setup)  
-
+- [Under the hood](#Under_the_hood)  
 
 ### Intro
 
